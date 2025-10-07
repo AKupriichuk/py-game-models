@@ -7,7 +7,7 @@ def main() -> None:
     with open("players.json", "r") as f:
         players_data = json.load(f)
 
-    for player_info in players_data.values():
+    for nickname, player_info in players_data.values():
         race_data = player_info.get("race")
         race_obj = None
         if race_data:
@@ -33,7 +33,7 @@ def main() -> None:
             )
         if race_obj:
             Player.objects.get_or_create(
-                nickname=player_info["nickname"],
+                nickname=nickname,
                 defaults={
                     "email": player_info["email"],
                     "bio": player_info["bio"],
