@@ -15,8 +15,9 @@ def main() -> None:
                 name=race_data["name"],
                 defaults={"description": race_data.get("description", "")},
             )
-            if "skills" in race_data:
-                for skill_data in race_data["skills"]:
+            skills_list = race_data.get("skills")
+            if skills_list:
+                for skill_data in skills_list:
                     Skill.objects.get_or_create(
                         name=skill_data["name"],
                         defaults={
