@@ -7,7 +7,7 @@ def main() -> None:
     with open("players.json", "r") as f:
         players_data = json.load(f)
 
-    for player_info in players_data:
+    for player_info in players_data.values():
         race_data = player_info.get("race")
         race_obj = None
         if race_data:
