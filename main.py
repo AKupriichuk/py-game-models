@@ -15,7 +15,6 @@ def main() -> None:
                 name=race_data["name"],
                 defaults={"description": race_data.get("description", "")},
             )
-            
         skill_data = player_info.get("skill")
         skill_obj = None
         if skill_data:
