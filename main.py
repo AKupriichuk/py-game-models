@@ -5,7 +5,7 @@ from db.models import Race, Skill, Player, Guild
 
 def main() -> None:
     with open("players.json", "r") as f:
-        players_data = json.loads(f.read())
+        players_data = json.load(f)
 
     for player_info in players_data:
         race_data = player_info.get("race")
@@ -15,13 +15,12 @@ def main() -> None:
                 name=race_data["name"],
                 defaults={"description": race_data.get("description", "")},
             )
-        skill_data = player_info.get("skill")
-        skill_obj = None
-        if skill_data:
-            skill_obj, _ = Skill.objects.get_or_create(
-                name=skill_data["name"],
-                defaults={"description": skill_data.get("description", "")},
-            )
+            if "skills" in race_data:
+                for skill_data in race_data["skills"]:
+                    Skill.objects.get_or_create(
+                        name=skill_data["name"],
+                        defaults={'bonus': skill_data["bonus"], 'race': race_obj}
+                    )
 
         guild_data = player_info.get("guild")
         guild_obj = None
@@ -30,16 +29,16 @@ def main() -> None:
                 name=guild_data["name"],
                 defaults={"description": guild_data.get("description")},
             )
-
-        Player.objects.get_or_create(
-            nickname=player_info["nickname"],
-            defaults={
-                "email": player_info["email"],
-                "bio": player_info["bio"],
-                "race": race_obj,
-                "guild": guild_obj,
-            },
-        )
+        if race_obj:
+            Player.objects.get_or_create(
+                nickname=player_info['nickname'],
+                defaults={
+                    "email": player_info['email'],
+                    "bio": player_info['bio'],
+                    "race": race_obj,
+                    "guild": guild_obj,
+                },
+            )
 
 
 if __name__ == "__main__":
